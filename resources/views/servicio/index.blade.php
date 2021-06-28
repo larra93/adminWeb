@@ -4,7 +4,7 @@
 @section('css')
     
 <link href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.min.css" rel="stylesheet">
-
+<link href="{{ asset('/css/toastr.css') }}" rel="stylesheet">
 @endsection
 
 @section('contenido')
@@ -42,17 +42,30 @@
   </tbody>
 </table>
 
-@section('js')
 
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.min.js"></script>
+
+@section('scripts')
+
+    
+@if ( session()->has('Result'))
+
+<script>
+    $(function(){
+        toastr.{{ session('Result')['status'] }}('{{session('Result')['content'] }}')
+    });
+</script>
+@endif
+
 
 <script>
     $(document).ready(function() {
     $('#servicios').DataTable();
 } );
 </script>
+
+
+
+
 
 @endsection
 
