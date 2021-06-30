@@ -1,9 +1,12 @@
+@extends('adminlte::page')
 
-@extends('layouts.main')
+@section('title', 'Dashboard')
 
+@section('content_header')
+    <h1>Nuevo Servicio</h1>
+@stop
 
-
-@section('contenido')
+@section('content')
 <h2>CREAR REGISTROS</h2>
 @if($message = Session::get('ErrorInsert'))
 
@@ -36,7 +39,15 @@
   <a href="/servicios" class="btn btn-secondary" tabindex="5">Cancelar</a>
   <button type="submit" class="btn btn-primary" tabindex="4">Guardar</button>
 </form>
+@stop
+
+@section('css')
+    <link rel="stylesheet" href="/css/admin_custom.css">
+@stop
+
+@section('js')
+    <script> console.log('Hi!'); </script>
+@stop
 
 
 
-@endsection
