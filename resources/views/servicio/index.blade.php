@@ -10,8 +10,8 @@
 <div class="container">
 <a href="servicios/create" class="btn btn-primary">CREAR</a>
 
-
-<table id="servicios" class="table table-striped shadow-lg mt-4" style="width: 100%">
+<div class="table-responsive-sm">
+<table id="servicios" class="table mt-4" style="width: 100%">
   <thead class="bg-primary text-white">
     <tr>
       <th scope="col">ID</th>
@@ -29,12 +29,16 @@
         <td>{{$servicio->descripcion}}</td>
         <td><img src="{{ asset('images/servicios/thumbs/'.$servicio->imagen) }}" width=100 > </td>
         <td>
-         <!--<form action="{{ route('servicios.destroy',$servicio->id) }}" method="POST">
-          <a href="/servicios/{{$servicio->id}}/edit" class="btn btn-info">Editar</a> 
-         -->
-         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modalEditar{{$servicio->id}}">
-          Editar 
-        </button>
+        
+         
+        <form action="{{ route ('servicios.destroy',$servicio->id)}}" class="form-eliminar" method="POST">
+          @csrf
+          @method('DELETE')
+          <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modalEditar{{$servicio->id}}">
+            Editar 
+          </button>
+          <button type="submit" class="btn btn-danger">Eliminar</button>
+          </form>  
 
         <!-- Modal -->
           <div class="modal fade"id="modalEditar{{$servicio->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -73,19 +77,14 @@
               </div>
             </div>
           </div>
-        
-          <form action="{{ route ('servicios.destroy',$servicio->id)}}" class="form-eliminar" method="POST">
-          @csrf
-          @method('DELETE')
-          <button type="submit" class="btn btn-danger">Eliminar</button>
-          </form>        
+
         </td>        
     </tr>
     @endforeach
   </tbody>
 </table>
 
-
+</div>
 </div>
 
 
