@@ -33,12 +33,14 @@
   </div>
   <div class="mb-3">
     <label for="" class="form-label">Imagen</label>
-    <input type="file" name="imagen" >
+    <input type="file" id="imagen" name="imagen" >
   </div>
  
   <a href="/servicios" class="btn btn-secondary" tabindex="5">Cancelar</a>
   <button type="submit" class="btn btn-primary" tabindex="4">Guardar</button>
 </form>
+
+<div  class ="mb-3 mt-3 d-flex flex-row justify-content-center alig-items-center" id="imagenPreview"></div>
 @stop
 
 @section('css')
@@ -46,7 +48,25 @@
 @stop
 
 @section('js')
-    <script> console.log('Hi!'); </script>
+ 
+<script>
+$(document).ready(function() {
+function filePreview(input){
+  if(input.files && input.files[0]){
+    var reader = new FileReader();
+    reader.onload = function(e){
+      $('#imagenPreview').html("<img width=600 class='img-fluid' src='"+e.target.result+"' />");
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+$('#imagen').change(function(){
+  filePreview(this);
+})
+
+});
+</script>
 @stop
 
 

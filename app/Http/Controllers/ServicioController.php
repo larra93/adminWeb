@@ -138,8 +138,49 @@ class ServicioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        
+        $servicio = Servicio::find($id);
+        $imagenPrevia = $servicio->imagen;
+       
+        $validator = Validator::make($request->all(),[
+            'nombre'=>'required|min:3',
+            'imagen'=>'image|mimes:jpg,jpeg,png',
+            'descripcion'=>'required'
+        ]);
+        if($validator->fails()){
+            return back()
+            ->withInput()
+            ->with('ErrorInsert','Favor llenar los datos')
+            ->withErrors($validator);
+        }else{
+
+
+            if ($request->hasFile('imagen')){
+                $imagen = $request->file('imagen');
+                $nombreFoto = time().'.'.$imagen->getClientOriginalExtension();
+                $destino = public_path('images/servicios');
+                $request->imagen->move($destino, $nombreFoto);
+                $red = Image::make($destino.'/'.$nombreFoto);
+                $red->resize(200,null, function($constraint){
+                $constraint->aspectRatio();
+            });
+            $red->save($destino.'/thumbs/'.$nombreFoto);
+                unlink($destino.'/'.$imagenPrevia);
+                unlink($destino.'/thumbs/'.$imagenPrevia);
+                $servicio->imagen=$nombreFoto; 
+    
+              }
+              $servicio->nombre= $request->nombre;
+              $servicio->descripcion= $request->descripcion;
+              $servicio->save();
+
+              return redirect('/servicios')->with('Result',[
+                'status' => 'success',
+                'content' => 'Servicio modificado con exito'
+            ]);
     }
+    
+}
 
     /**
      * Remove the specified resource from storage.
@@ -149,6 +190,16 @@ class ServicioController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $servicio = Servicio::find($id);
+        $imagenPrevia = $servicio->imagen;
+        if($servicio->delete()){
+            $destino = public_path('images/servicios');
+            unlink($destino.'/'.$imagenPrevia);
+            unlink($destino.'/thumbs/'.$imagenPrevia);
+            return redirect('/servicios')->with('Result',[
+                'status' => 'success',
+                'content' => 'Servicio eliminado con exito'
+            ]);
+        }
     }
 }
